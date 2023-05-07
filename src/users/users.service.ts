@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { HttpCustomService } from 'src/providers/http/http-custom.service';
 import { IUser } from './interfaces/user.interface';
 import { IUserFindAll } from './interfaces/user-findall.interface';
+import { IUserDetails } from './interfaces/user-details.interface';
 
 @Injectable()
 export class UsersService {
@@ -11,10 +12,10 @@ export class UsersService {
 
   async findAll(since: string): Promise<IUserFindAll> {
     const { data } = await this.httpCustomService.get<IUser[]>(
-      'https://api.github.com/users',
+      process.env.GITHUB_USERS_ENDPOINT,
       {
         headers: {
-          Authorization: 'Bearer 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',
+          Authorization: process.env.GITHUB_ACCESS_TOKEN,
         },
         params: {
           per_page: this.itensPerPage,
@@ -23,7 +24,7 @@ export class UsersService {
       },
     );
 
-    const url = 'http://localhost:3000/api/users';
+    const url = process.env.CURRENT_PROJECT_URL;
 
     const nextPage = `${url}?since=${+since + this.itensPerPage}`;
     const prevPage =
@@ -40,7 +41,16 @@ export class UsersService {
     };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(username: string) {
+    const { data } = await this.httpCustomService.get<IUserDetails[]>(
+      `${process.env.GITHUB_USERS_ENDPOINT}/${username}`,
+      {
+        headers: {
+          Authorization: process.env.GITHUB_ACCESS_TOKEN,
+        },
+      },
+    );
+
+    return data;
   }
 }
