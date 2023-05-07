@@ -3,6 +3,7 @@ import { HttpCustomService } from 'src/providers/http/http-custom.service';
 import { IUser } from './interfaces/user.interface';
 import { IUserFindAll } from './interfaces/user-findall.interface';
 import { IUserDetails } from './interfaces/user-details.interface';
+import { IUserRepos } from './interfaces/user-repos.interface';
 
 @Injectable()
 export class UsersService {
@@ -44,6 +45,19 @@ export class UsersService {
   async findOne(username: string) {
     const { data } = await this.httpCustomService.get<IUserDetails[]>(
       `${process.env.GITHUB_USERS_ENDPOINT}/${username}`,
+      {
+        headers: {
+          Authorization: process.env.GITHUB_ACCESS_TOKEN,
+        },
+      },
+    );
+
+    return data;
+  }
+
+  async findAllReposByUser(username: string) {
+    const { data } = await this.httpCustomService.get<IUserRepos[]>(
+      `${process.env.GITHUB_USERS_ENDPOINT}/${username}/repos`,
       {
         headers: {
           Authorization: process.env.GITHUB_ACCESS_TOKEN,

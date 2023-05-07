@@ -14,4 +14,9 @@ export class UsersController {
   findOne(@Param('username') username: string) {
     return this.usersService.findOne(username);
   }
+
+  @Get(':username/repos')
+  findAllReposByUser(@Param('username') username: string) {
+    return this.usersService.findAllReposByUser(username);
+  }
 }
