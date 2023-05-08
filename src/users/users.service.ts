@@ -11,7 +11,7 @@ export class UsersService {
 
   private readonly itensPerPage = 10;
 
-  async findAll(since: string): Promise<IUserFindAll> {
+  async findAll(since?: string): Promise<IUserFindAll> {
     const { data } = await this.httpCustomService.get<IUser[]>(
       process.env.GITHUB_USERS_ENDPOINT,
       {
@@ -20,16 +20,16 @@ export class UsersService {
         },
         params: {
           per_page: this.itensPerPage,
-          since: since,
+          since: since ? since : 0,
         },
       },
     );
 
     const url = process.env.CURRENT_PROJECT_URL;
 
-    const nextPage = `${url}?since=${+since + this.itensPerPage}`;
+    const nextPage = `${url}?since=${(+since || 0) + this.itensPerPage}`;
     const prevPage =
-      +since - this.itensPerPage < 0
+      (+since || 0) - this.itensPerPage < 0
         ? `${url}?since=0`
         : `${url}?since=${+since - this.itensPerPage}`;
 
