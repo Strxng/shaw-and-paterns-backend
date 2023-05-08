@@ -5,5 +5,4 @@
 <ul>
   <li>GITHUB_USERS_ENDPOINT=https://api.github.com/users</li>
   <li>GITHUB_ACCESS_TOKEN=YOUR_PERSONAL_ACCESS_TOKEN</li>
-  <li>CURRENT_PROJECT_URL=LOCALHOST_URL OR APPLICATION_DNS</li>
 </ul>

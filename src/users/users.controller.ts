@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 
 @Controller('api/users')
@@ -6,8 +6,10 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get('')
-  findAll(@Query() query: { since: string }) {
-    return this.usersService.findAll(query.since);
+  findAll(@Query() query: { since: string }, @Req() req: any) {
+    const urlBase = `${req.protocol}://${req.get('Host')}${req.originalUrl}`;
+
+    return this.usersService.findAll(urlBase, query.since);
   }
 
   @Get(':username/details')
