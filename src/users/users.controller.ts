@@ -7,7 +7,7 @@ export class UsersController {
 
   @Get('')
   findAll(@Query() query: { since: string }, @Req() req: any) {
-    const urlBase = `${req.protocol}://${req.get('Host')}${req.originalUrl}`;
+    const urlBase = `https://${req.get('Host')}${req.originalUrl}`;
 
     return this.usersService.findAll(urlBase, query.since);
   }
